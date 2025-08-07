@@ -94,8 +94,7 @@
         const typingIndicator = document.getElementById('typing-indicator');
         
         // The webhook URL where you'll send the user's question.
-        // Replace this with your actual AI agent's webhook endpoint.
-        const WEBHOOK_URL = 'https://your-ai-agent-webhook.com/chat';
+        const WEBHOOK_URL = 'https://abdelrhmanl0.app.n8n.cloud/webhook/d01e3664-2dd8-4b27-b39a-64e802eb9662';
 
         /**
          * Appends a message to the chat container.
@@ -150,15 +149,13 @@
         }
 
         /**
-         * Simulates sending a message to the AI and getting a response.
-         * In a real application, this would be a fetch call to your webhook.
+         * Sends a message to the AI and gets a response via webhook.
          * @param {string} userMessage - The message from the user.
          */
         async function getAIResponse(userMessage) {
             toggleTypingIndicator(true);
 
-            // --- REAL WEBHOOK IMPLEMENTATION (EXAMPLE) ---
-            /*
+            // --- REAL WEBHOOK IMPLEMENTATION ---
             try {
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
@@ -173,6 +170,7 @@
                 }
 
                 const data = await response.json();
+                // Assumes your webhook returns a JSON object like { "answer": "..." }
                 const aiAnswer = data.answer || "I'm sorry, I couldn't process that.";
                 
                 toggleTypingIndicator(false);
@@ -183,15 +181,6 @@
                 toggleTypingIndicator(false);
                 appendMessage("Oops! Something went wrong. Please try again later.", 'ai');
             }
-            */
-            
-            // --- SIMULATED RESPONSE (FOR DEMONSTRATION) ---
-            // We use a timeout to mimic the delay of a network request.
-            setTimeout(() => {
-                toggleTypingIndicator(false);
-                const simulatedAnswer = `This is a simulated response to your question: "${userMessage}". In a real application, this text would come from your AI agent via the configured webhook.`;
-                appendMessage(simulatedAnswer, 'ai');
-            }, 1500 + Math.random() * 1000); // Simulate a delay of 1.5-2.5 seconds
         }
 
         /**
