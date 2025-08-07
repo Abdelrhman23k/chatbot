@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Box</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for a cleaner look */
+        #chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        #chat-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        #chat-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        #chat-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <div class="w-full max-w-2xl h-full sm:h-[90vh] flex flex-col bg-white shadow-2xl rounded-2xl">
+        <!-- Header -->
+        <div class="bg-slate-800 text-white p-4 sm:p-6 flex items-center justify-between rounded-t-2xl shadow-md">
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+                    </div>
+                    <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-slate-800 rounded-full"></span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold">AI Assistant</h1>
+                    <p class="text-sm text-slate-300">Online</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div id="chat-container" class="flex-1 p-4 sm:p-6 space-y-6 overflow-y-auto">
+            <!-- Initial AI Message -->
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-xl max-w-lg">
+                    <p class="text-sm text-gray-800">
+                        Hello! I'm your friendly AI assistant. How can I help you today?
+                    </p>
+                </div>
+            </div>
+            <!-- Messages will be appended here -->
+        </div>
+
+        <!-- Typing Indicator -->
+        <div id="typing-indicator" class="hidden flex items-start gap-3 p-4 sm:p-6">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+            </div>
+            <div class="bg-gray-100 p-4 rounded-xl flex items-center space-x-2">
+                <div class="w-2 h-2 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                <div class="w-2 h-2 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div class="w-2 h-2 bg-slate-500 rounded-full animate-bounce"></div>
+            </div>
+        </div>
+
+        <!-- Input Form -->
+        <div class="p-4 sm:p-6 bg-white border-t border-gray-200 rounded-b-2xl">
+            <form id="chat-form" class="flex items-center space-x-4">
+                <input type="text" id="message-input" placeholder="Type your question here..." autocomplete="off"
+                    class="flex-1 w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow">
+                <button type="submit"
+                    class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-horizontal"><path d="m3 3 3 9-3 9 19-9Z"/><path d="M6 12h16"/></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // DOM element references
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message-input');
+        const chatContainer = document.getElementById('chat-container');
+        const typingIndicator = document.getElementById('typing-indicator');
+        
+        // The webhook URL where you'll send the user's question.
+        // Replace this with your actual AI agent's webhook endpoint.
+        const WEBHOOK_URL = 'https://your-ai-agent-webhook.com/chat';
+
+        /**
+         * Appends a message to the chat container.
+         * @param {string} text - The message text.
+         * @param {'user' | 'ai'} sender - The sender of the message.
+         */
+        function appendMessage(text, sender) {
+            const messageWrapper = document.createElement('div');
+            const messageContent = document.createElement('div');
+            
+            if (sender === 'user') {
+                // User message styling
+                messageWrapper.className = 'flex items-start gap-3 justify-end';
+                messageContent.className = 'bg-blue-600 text-white p-4 rounded-xl max-w-lg';
+                messageContent.innerHTML = `<p class="text-sm">${text}</p>`;
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0';
+                avatar.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+                
+                messageWrapper.appendChild(messageContent);
+                messageWrapper.appendChild(avatar);
+
+            } else {
+                // AI message styling
+                messageWrapper.className = 'flex items-start gap-3';
+                messageContent.className = 'bg-gray-100 p-4 rounded-xl max-w-lg';
+                messageContent.innerHTML = `<p class="text-sm text-gray-800">${text}</p>`;
+
+                const avatar = document.createElement('div');
+                avatar.className = 'w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center flex-shrink-0';
+                avatar.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>';
+                
+                messageWrapper.appendChild(avatar);
+                messageWrapper.appendChild(messageContent);
+            }
+
+            chatContainer.appendChild(messageWrapper);
+            // Scroll to the bottom to show the latest message
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        /**
+         * Shows or hides the typing indicator.
+         * @param {boolean} show - Whether to show the indicator.
+         */
+        function toggleTypingIndicator(show) {
+            typingIndicator.style.display = show ? 'flex' : 'none';
+            if (show) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+        /**
+         * Simulates sending a message to the AI and getting a response.
+         * In a real application, this would be a fetch call to your webhook.
+         * @param {string} userMessage - The message from the user.
+         */
+        async function getAIResponse(userMessage) {
+            toggleTypingIndicator(true);
+
+            // --- REAL WEBHOOK IMPLEMENTATION (EXAMPLE) ---
+            /*
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question: userMessage }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Webhook failed with status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiAnswer = data.answer || "I'm sorry, I couldn't process that.";
+                
+                toggleTypingIndicator(false);
+                appendMessage(aiAnswer, 'ai');
+
+            } catch (error) {
+                console.error("Error calling webhook:", error);
+                toggleTypingIndicator(false);
+                appendMessage("Oops! Something went wrong. Please try again later.", 'ai');
+            }
+            */
+            
+            // --- SIMULATED RESPONSE (FOR DEMONSTRATION) ---
+            // We use a timeout to mimic the delay of a network request.
+            setTimeout(() => {
+                toggleTypingIndicator(false);
+                const simulatedAnswer = `This is a simulated response to your question: "${userMessage}". In a real application, this text would come from your AI agent via the configured webhook.`;
+                appendMessage(simulatedAnswer, 'ai');
+            }, 1500 + Math.random() * 1000); // Simulate a delay of 1.5-2.5 seconds
+        }
+
+        /**
+         * Handles the form submission event.
+         * @param {Event} e - The form submission event.
+         */
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent the form from reloading the page
+            const userMessage = messageInput.value.trim();
+
+            if (userMessage) {
+                appendMessage(userMessage, 'user');
+                messageInput.value = ''; // Clear the input field
+                getAIResponse(userMessage);
+            }
+        });
+    </script>
+
+</body>
+</html>
