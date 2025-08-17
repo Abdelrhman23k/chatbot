@@ -94,7 +94,7 @@
         const typingIndicator = document.getElementById('typing-indicator');
         
         // The webhook URL where you'll send the user's question.
-        const WEBHOOK_URL = 'https://abdelrhmanl0.app.n8n.cloud/webhook/5bc89913-a5bd-4f6d-bfba-cbc00f97cd08';
+        const WEBHOOK_URL = 'https://abdelrhmanl0.app.n8n.cloud/webhook/5bc8Domain-a5bd-4f6d-bfba-cbc00f97cd08';
 
         /**
          * Appends a message to the chat container.
@@ -124,12 +124,11 @@
                 messageContent.className = 'bg-gray-100 p-4 rounded-xl max-w-lg';
 
                 // --- CHANGE IS HERE ---
-                // Convert escaped newlines, regular newlines, and bolding to HTML
-                let formattedText = text.replace(/\\n/g, '<br>');
-                formattedText = formattedText.replace(/\n/g, '<br>');
-                formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                // First, handle bolding with a simple regex
+                let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 
-                messageContent.innerHTML = `<p class="text-sm text-gray-800">${formattedText}</p>`;
+                // Then, set the innerHTML with a style that preserves whitespace and newlines
+                messageContent.innerHTML = `<p class="text-sm text-gray-800" style="white-space: pre-wrap;">${formattedText}</p>`;
                 // --- END OF CHANGE ---
 
                 const avatar = document.createElement('div');
